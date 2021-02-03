@@ -1,0 +1,309 @@
+<div class="container">
+  <span>
+    <img
+    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuAzp0DXBfdaR5l55qGTxEEfCD1d6rPdMlDw&usqp=CAU"
+    class="img-center">
+  </span>
+</div>
+
+
+<body class="bg">
+
+<div class="bg">
+<!--NAV-->
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" (click)="collapsed = !collapsed">
+      <span class="icon-bar" *ngFor="let iconBar of [1, 2, 3]"></span>
+      </button>
+      <a routerLink="/" class="navbar-brand">Espresso Logger</a>
+    </div>
+    <div class="navbar-collapse" [class.collapse]="collapsed" (window:resize)="collapsed = true">
+
+    <div class="navbar-default">
+      <ul class="nav navbar-nav navbar-inverse">
+        <li><a (click)="brewsToggle()">Brews</a></li>
+        <li><a (click)="toggleBatch()">Coffee Beans Batch</a></li>
+        <li><a (click)="toggleBeans()">Coffee Beans</a></li>
+      </ul>
+    </div>
+  </div>
+  </div>
+</nav>
+<!--BREWS-->
+<div class="container" *ngIf=brewsDisplay>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4">
+        <p style="font-size:60px">Brews</p>
+      </div>
+      <div class="col-sm-2" text-align="img-center">
+        <div class="tooltip"></div>
+          <a (click)="newBrewToggle()" data-toggle="tooltip" data-placement="bottom" title="Create New">
+            <img src="https://icons-for-free.com/iconfiles/png/512/create+new+plus+icon-1320183284524393487.png" alt="New Brew" width="70" height="70">
+          </a>
+      </div>
+      <div class="col-sm-2" text-align="img-center">
+        <a (click)="listToggle()" data-toggle="tooltip" data-placement="bottom" title="View All">
+          <img src="https://image.flaticon.com/icons/png/512/60/60528.png" alt="View Brew List" width="70" height="70">
+        </a>
+    </div>
+    </div>
+    <!--NEW BREW FORM-->
+    <div class="row" *ngIf=newBrewFormToggle>
+      <div class="col-sm-4" >
+        <h2>New Brew</h2>
+        <form>
+          <div class="form-group">
+            <label for="brewName">Name</label>
+            <input type="text" class="form-control" id="brewName" placeholder="Brew Name" [(ngModel)]="b_Name" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="brewCoffeBeanBatch">Batch</label>
+            <select name="brewCoffeeBatch" class="form-control" [(ngModel)]="b_cBatch">
+              <option *ngFor="let batch of batchList" >{{batch.batchName}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="brewDate">Date</label>
+            <input type="date" class="form-control" id="brewDate" [(ngModel)]="b_date" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="brewHour">Hour</label>
+            <input type="time" class="form-control" id="brewHour" [(ngModel)]="b_hour" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="brewGramsIn">Grams In</label>
+            <input type="number" class="form-control" id="brewGramsIn" placeholder="Amount of Gram Intake" [(ngModel)]="b_gramsIn" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="brewGramsIn">Grams Out</label>
+            <input type="number" class="form-control" id="brewGramsOut" placeholder="Amount of Gram Outtake" [(ngModel)]="b_gramsOut" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="brewTemp">Temperature</label>
+            <input type="number" class="form-control" id="brewTemp"  placeholder="Temperature (°C)" [(ngModel)]="b_temp" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="brewSeconds">Seconds</label>
+            <input type="number" class="form-control" id="brewSeconds" placeholder="Seconds" [(ngModel)]="b_seconds" [ngModelOptions]="{standalone: true}">
+          </div>
+            <button class="btn btn-primary" type="submit" (click)="addBrew()">Submit</button>
+        </form>
+      </div>
+      <div class="col-sm-8">
+        <div class="card" style="text-align: center;">
+          <img class="img-circle" src="https://www.pngkey.com/png/detail/524-5249933_cafs-e-infusiones-iconos-de-cafeteria-png.png" alt="Card image cap" width="300" height="300">
+          <div class="card-body">
+            <h3 class="card-text"><b>{{b_Name}}</b></h3>
+            <p class="card-text" style="font-size: medium;"><b>Batch: {{b_cBatch}}</b></p>
+            <p class="card-text" style="font-size: medium;"><b>{{b_date}}</b></p>
+            <p class="card-text" style="font-size: medium;"><b>{{b_hour}}</b></p>
+            <p class="card-text" style="font-size: medium;"><b>Grams In: {{b_gramsIn}}g</b></p>
+            <p class="card-text" style="font-size: medium;"><b>Grams Out: {{b_gramsOut}}g</b></p>
+            <p class="card-text" style="font-size: medium;"><b>Temperature: {{b_temp}} °C</b></p>
+            <p class="card-text" style="font-size: medium;"><b>{{b_seconds}} sec</b></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--BREW LIST-->
+    <div *ngIf=display>
+      <div *ngFor="let brew of brewsList">
+        <div class="col-sm-4">
+          <div class="card" style="text-align: center;">
+            <img class="img-circle" src="https://www.pngkey.com/png/detail/524-5249933_cafs-e-infusiones-iconos-de-cafeteria-png.png" alt="Card image cap" width="300" height="300">
+            <div class="card-body">
+              <h2 class="card-text"><b>{{brew.brewName}}</b></h2>
+              <p class="card-text" style="font-size: large;"><b>Coffee Beans: {{brew.brewCoffeeBatch}}</b></p>
+              <p class="card-text" style="font-size: large;"><b>{{brew.brewDate}}</b></p>
+              <p class="card-text" style="font-size: large;"><b>{{brew.brewHour}}</b></p>
+              <p class="card-text" style="font-size: large;"><b>Grams In: {{brew.brewGramsIn}}g</b></p>
+              <p class="card-text" style="font-size: large;"><b>Grams Out: {{brew.brewGramsOut}}g</b></p>
+              <p class="card-text" style="font-size: large;"><b>Temperature: {{brew.brewTemp}} °C</b></p>
+              <p class="card-text" style="font-size: large;"><b>{{brew.brewSeconds}} sec</b></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--BATCH-->
+<div class="container" *ngIf=batchDisplay>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4">
+        <p style="font-size:60px">Batch</p>
+      </div>
+      <div class="col-sm-2" text-align="img-center">
+        <div class="tooltip"></div>
+          <a (click)="toggleBatchForm()" data-toggle="tooltip" data-placement="bottom" title="Add New">
+            <img src="https://icons-for-free.com/iconfiles/png/512/create+new+plus+icon-1320183284524393487.png" alt="New Batch" width="70" height="70">
+          </a>
+      </div>
+      <div class="col-sm-2" text-align="img-center">
+        <a (click)="toggleBatchList()" data-toggle="tooltip" data-placement="bottom" title="View All">
+          <img src="https://image.flaticon.com/icons/png/512/60/60528.png" alt="New Brew" width="70" height="70">
+        </a>
+    </div>
+    </div>
+    <!--NEW BATCH FORM-->
+    <div class="row" *ngIf=batchFormDisplay>
+      <div class="col-sm-4" >
+        <h2>New Batch</h2>
+        <form>
+          <div class="form-group">
+            <label for="batchName">Name</label>
+            <input type="text" class="form-control" id="batchName" placeholder="Batch Name" [(ngModel)]="batch_Name" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="batchRoastDate">Roast Date</label>
+            <input type="date" class="form-control" id="batchRoastDate" [(ngModel)]="batch_RoastDate" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="batchCoffeeBeans">Coffee Beans</label>
+            <select name="batchcoffeeBeans" class="form-control" [(ngModel)]="batch_Beans">
+              <option *ngFor="let bean of beansList" >{{bean.beansName}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="batchRoaster">Roaster</label>
+            <input type="text" class="form-control" id="batchRoaster" placeholder="Roaster Name" [(ngModel)]="batch_Roaster" [ngModelOptions]="{standalone: true}">
+          </div>
+          <button class="btn btn-primary" type="submit" (click)="addBatch()">Submit</button>
+        </form>
+      </div>
+      <div class="col-sm-8">
+        <div class="card" style="text-align: center;">
+          <img class="img-circle" src="https://png.pngtree.com/png-vector/20190409/ourlarge/pngtree-coffee-bag-flat-icon-png-image_911441.jpg" alt="Card image cap" width="300" height="300">
+          <div class="card-body">
+            <h3 class="card-text"><b>{{batch_Name}}</b></h3>
+            <p class="card-text" style="font-size: medium;"><b>{{batch_RoastDate}}</b></p>
+            <p class="card-text" style="font-size: medium;"><b>Coffee Beans: {{batch_Beans}}</b></p>
+            <p class="card-text" style="font-size: medium;"><b>Roaster: {{batch_Roaster}}</b></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--BATCH LIST-->
+    <div *ngIf=batchListDisplay>
+      <div *ngFor="let batch of batchList">
+        <div class="col-sm-4">
+          <div class="card" style="text-align: center;">
+            <img class="img-circle" src="https://png.pngtree.com/png-vector/20190409/ourlarge/pngtree-coffee-bag-flat-icon-png-image_911441.jpg" alt="Card image cap" width="300" height="300">
+            <div class="card-body">
+              <h2 class="card-text"><b>{{batch.batchName}}</b></h2>
+              <p class="card-text" style="font-size: large;"><b>Beans: {{batch.batchBeans}}</b></p>
+              <p class="card-text" style="font-size: large;"><b>{{batch.batchRoastDate}}</b></p>
+              <p class="card-text" style="font-size: large;"><b>Roaster: {{batch.batchRoaster}}</b></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--BEANS-->
+<div class="container" *ngIf=beansDisplay>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4">
+        <p style="font-size:60px">Beans</p>
+      </div>
+      <div class="col-sm-2" text-align="img-center">
+        <div class="tooltip"></div>
+          <a (click)="toggleBeansForm()" data-toggle="tooltip" data-placement="bottom" title="Add New">
+            <img src="https://icons-for-free.com/iconfiles/png/512/create+new+plus+icon-1320183284524393487.png" alt="New Batch" width="70" height="70">
+          </a>
+      </div>
+      <div class="col-sm-2" text-align="img-center">
+        <a (click)="toggleBeansList()" data-toggle="tooltip" data-placement="bottom" title="View All">
+          <img src="https://image.flaticon.com/icons/png/512/60/60528.png" alt="New Brew" width="70" height="70">
+        </a>
+    </div>
+    </div>
+    <!--NEW BEANS FORM-->
+    <div class="row" *ngIf=beansFormDisplay>
+      <div class="col-sm-4" >
+        <h2>Add Beans</h2>
+        <form>
+          <div class="form-group">
+            <label for="beanName">Name</label>
+            <input type="text" class="form-control" id="beanName" placeholder="Coffee Beans Name" [(ngModel)]="beans_Name" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="beanCountry">Country</label>
+            <input type="text" class="form-control" id="beanCountry" placeholder="Country of Origin" [(ngModel)]="beans_Country" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="beanVariety">Variety</label>
+            <input type="text" class="form-control" id="beanVariety" placeholder="Variety" [(ngModel)]="beans_Variety" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="beanProccess">Proccess</label>
+            <input type="text" class="form-control" id="beanProccess" placeholder="Proccess" [(ngModel)]="beans_Proccess" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="beanAltitude">Altitude</label>
+            <input type="number" class="form-control" id="beanAltitude" placeholder="Altitude (m)" [(ngModel)]="beans_Altitude" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="beanRecipe">Recipe</label>
+            <input type="text" class="form-control" id="beanRecipe" placeholder="Recipe" [(ngModel)]="beans_Recipe" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="beanTasteProfile">Taste Profile</label>
+            <input type="text" class="form-control" id="beanTasteProfile" placeholder="Taste Profile (e.g. Sweet, Bitter ..)" [(ngModel)]="beans_TasteProfile" [ngModelOptions]="{standalone: true}" data-toggle="tooltip" data-placement="bottom" title="View All">
+          </div>
+          <button class="btn btn-primary" type="submit" (click)="addBeans()">Submit</button>
+        </form>
+      </div>
+      <div class="col-sm-8">
+        <div class="card" style="text-align: center;">
+          <img class="img-circle" src="https://us.123rf.com/450wm/chirokung2/chirokung22009/chirokung2200900108/155147180-stock-vector-coffee-bean-icon-coffee-beans-arranged-in-a-heart-shape-.jpg?ver=6" alt="Card image cap" width="300" height="300">
+          <div class="card-body">
+            <h3 class="card-text" ><b>{{beans_Name}}</b></h3>
+            <p class="card-text" style="font-size: medium;"><b>Country: {{beans_Country}}</b></p>
+            <p class="card-text" style="font-size: medium;"><b>Variety: {{beans_Variety}}</b></p>
+            <p class="card-text" style="font-size: medium;"><b>Proccess: {{beans_Proccess}}</b></p>
+            <p class="card-text" style="font-size: medium;"><b>Altitude: {{beans_Altitude}}m</b></p>
+            <p class="card-text" style="font-size: medium;"><b>Recipe: {{beans_Recipe}}</b></p>
+            <p class="card-text" style="font-size: medium;"><b>Taste Profile: {{beans_TasteProfile}}</b></p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--BEANS LIST-->
+    <div *ngIf=beansListDisplay>
+      <div *ngFor="let bean of beansList">
+        <div class="col-sm-4">
+          <div class="card" style="text-align: center;">
+            <img class="img-circle" src="https://us.123rf.com/450wm/chirokung2/chirokung22009/chirokung2200900108/155147180-stock-vector-coffee-bean-icon-coffee-beans-arranged-in-a-heart-shape-.jpg?ver=6" alt="Card image cap" width="300" height="300">
+            <div class="card-body">
+              <h2 class="card-text"><b>{{bean.beansName}}</b></h2>
+              <p class="card-text" style="font-size: large;"><b>Country: {{bean.beansCountry}}</b></p>
+              <p class="card-text" style="font-size: large;"><b>Variety: {{bean.beansVariety}}</b></p>
+              <p class="card-text" style="font-size: large;"><b>Proccess: {{bean.beansProccess}}</b></p>
+              <p class="card-text" style="font-size: large;"><b>Altitude: {{bean.beansAltitude}}m</b></p>
+              <p class="card-text" style="font-size: large;"><b>Recipe: {{bean.beansRecipe}}</b></p>
+              <p class="card-text" style="font-size: large;"><b>Taste Profile: {{bean.beansTasteProfile}}</b></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!--
+<div class="footer">
+  <p>Espresso Logger 2021</p>
+</div>
+
+-->
+
+</body>
