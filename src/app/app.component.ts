@@ -1,4 +1,4 @@
-import { Time } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 import { removeAllListeners } from 'process';
 import * as $ from 'jquery';
@@ -6,6 +6,8 @@ import { Brew } from './brew.model';
 import { TestBed } from '@angular/core/testing';
 import { coffeeBatch } from './coffeeBatch.model';
 import { coffeeBeans } from './coffeeBeans.model';
+import { Time } from '@angular/common';
+
 
 @Component({
   selector: 'app-root',
@@ -15,18 +17,29 @@ import { coffeeBeans } from './coffeeBeans.model';
 export class AppComponent {
   title = 'Test';
 
+  //TESTING
   brewList: string[] = ['Brew 1', 'Brew 2', 'Brew 3'];
   cBatchList: string[] = ['Batch 1', 'Batch 2', 'Batch 3'];
   cBeansList: string[] = ['Beans 1', 'Beans 2', 'Beans 3'];
+  testDate:Date=new Date;
+  testBeans:coffeeBeans= new coffeeBeans('Las Lomas', 'Honduras', 'Catuai', 'Natural', 1600, 'Secret Recipe I', 'Passion fruit, Natural Orange');
+  testBeansII:coffeeBeans=new coffeeBeans('Whiplash', 'Brazil, Ethiopia', 'Cattura, Heirloom, Typica', 'Natural, Pulped', 2000, 'Secret Recipe II', 'Chocolate, Caramel');
+  testBeansIII: coffeeBeans=new coffeeBeans('Villa Caldas', 'Colombia', 'Cattura, Typica', 'Washed', 1500, 'Secret Reipe III', 'Fruity, Sweet');
 
-
+  //ARRAYS
   brewsList: Brew[] = [
-    //new Brew ('test', 12:48, 23, 24, 25, 26, 27, 'testbatch')
+
   ];
 
-  batchList: coffeeBatch[] = [];
+  batchList: coffeeBatch[] = [
 
-  beansList: coffeeBeans[] = [];
+  ];
+
+  beansList: coffeeBeans[] = [
+   this.testBeans,
+   this.testBeansII,
+   this.testBeansIII
+  ];
 
 
   //TOGGLE PARAMS
@@ -91,7 +104,6 @@ export class AppComponent {
     const newBrew = new Brew (this.b_Name, this.b_hour, this.b_date, this.b_gramsIn, this.b_gramsOut, this.b_temp, this.b_seconds, this.b_cBatch);
     this.brewsList.push(newBrew);
     this.newBrewFormToggle=false;
-    console.log("SUBMIT CLICKED");
   }
 
   newBrewToggle(){
@@ -133,7 +145,6 @@ export class AppComponent {
     const newBatch = new coffeeBatch (this.batch_Name, this.batch_RoastDate, this.batch_Roaster, this.batch_Beans);
     this.batchList.push(newBatch);
     this.batchFormDisplay=false;
-    console.log("SUBMIT CLICKED");
   }
 
   toggleBeans(){
@@ -155,7 +166,6 @@ export class AppComponent {
     const newBeans = new coffeeBeans(this.beans_Name, this.beans_Country, this.beans_Variety, this.beans_Proccess, this.beans_Altitude, this.beans_Recipe, this.beans_TasteProfile);
     this.beansList.push(newBeans);
     this.beansFormDisplay=false;
-    console.log("SUBMIT CLICKED");
   }
 }
 
